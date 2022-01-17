@@ -1,3 +1,4 @@
+import com.sun.org.apache.xpath.internal.objects.XString;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -5,10 +6,9 @@ import org.apache.commons.csv.CSVRecord;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+
 
 /**
  * Created by LaunchCode
@@ -28,7 +28,6 @@ public class JobData {
      * @return List of all of the values of the given field
      */
     public static ArrayList<String> findAll(String field) {
-
         // load data, if not already loaded
         loadData();
 
@@ -36,7 +35,6 @@ public class JobData {
 
         for (HashMap<String, String> row : allJobs) {
             String aValue = row.get(field);
-
             if (!values.contains(aValue)) {
                 values.add(aValue);
             }
@@ -44,6 +42,7 @@ public class JobData {
 
         // Bonus mission: sort the results
         Collections.sort(values);
+
 
         return values;
     }
@@ -72,13 +71,13 @@ public class JobData {
 
         // load data, if not already loaded
         loadData();
-
+        value = value.toLowerCase();
         ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
 
         for (HashMap<String, String> row : allJobs) {
 
             String aValue = row.get(column);
-
+            aValue = aValue.toLowerCase();
             if (aValue.contains(value)) {
                 jobs.add(row);
             }
@@ -99,8 +98,26 @@ public class JobData {
         loadData();
 
         // TODO - implement this method
-        return null;
+
+        ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
+                value = value.toLowerCase();
+                String strVal = "";
+                String strVal2 = "";
+                for (HashMap<String, String> entry : allJobs){
+                    for (Map.Entry<String, String> column : entry.entrySet()) {
+                        strVal = column.getKey();
+                        strVal2 = entry.get(strVal);
+                        strVal2 = strVal2.toLowerCase();
+                        if (strVal2.contains(value)) {
+                            jobs.add(entry);
+                        }
+                     }
+
+                }
+
+            return jobs;
     }
+
 
     /**
      * Read in data from a CSV file and store it in a list
